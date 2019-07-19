@@ -1,0 +1,66 @@
+function convertToRoman(num) {
+  
+  let romansObj = {
+    '1': 'I',
+    '5': 'V',
+    '10': 'X',
+    '50': 'L',
+    '100': 'C',
+    '500': 'D',
+    '1000': 'M',
+  }
+  
+  let numStrArr = num.toString().split('').reverse();
+  let numNumArr = numStrArr.map((e) => parseInt(e));
+
+for (let i=1; i < numNumArr.length; i++){
+  numNumArr[i] = Math.pow(10,i) * numNumArr[i];
+}
+
+let romanArr = [];
+for (let i = 0; i< numNumArr.length; i++){
+  //if e is exactly equal to 5,500,5000
+  if (numNumArr[i] == Math.pow(10,i)*5){
+    romanArr[i] = romansObj[numNumArr[i].toString()] 
+  }else if (numNumArr[i] == Math.pow(10,i)*4 || numNumArr[i] == Math.pow(10,i)*9){ 
+    //if e is a tens multiple of 4 or 9
+    let divisor = (numNumArr[i] == Math.pow(10,i)*4 )? 4 : 9;
+      let currentPos = romansObj[parseInt(numNumArr[i]/divisor).toString()];
+      let nextPos = romansObj[(numNumArr[i] + Math.pow(10,i)).toString()]
+      romanArr[i] = currentPos + nextPos;
+      
+  
+  }else if (numNumArr[i] < Math.pow(10,i)*5){
+    //below the 5 and not 4
+    let value = romansObj[Math.pow(10,i).toString()]
+    let newValue = '';
+    let numTimesToConcat = parseInt(numNumArr[i]/Math.pow(10,i))
+    for(let j = 0; j < numTimesToConcat; j++){
+      newValue += value;
+    }
+    romanArr[i] = newValue;
+
+ }else{
+   //above the 5 and not 9
+  
+   let numTimesToConcat = parseInt((numNumArr[i] - Math.pow(10,i)*5)/Math.pow(10,i))
+
+   
+ let romanToConcat = romansObj[(Math.pow(10,i)).toString()]
+ let romanConcated ='';
+ for (let k = 0; k < numTimesToConcat; k++){
+   romanConcated += romanToConcat;
+ }
+ let firstRoman = romansObj[(Math.pow(10,i)*5).toString()]
+
+ romanArr[i] = firstRoman + romanConcated;
+ }
+
+}
+return romanArr.reverse().join('');
+  
+}///end of function convertToRoman
+
+
+
+convertToRoman(36);
